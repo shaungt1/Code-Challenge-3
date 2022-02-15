@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Code Challenge #2 API fetch</title>
+    <meta charset="UTF-8" />
+  </head>
+
+  <body>
+    <!-- Web Components -->
+    <div id="app"></div>
+    <div id="results" class="hide"></div>
+
+    <!-- Scripts in body for faster load time -->
+    <script src="src/app.js"></script>
+    <script src="src/results.js"></script>
+
+    <script>
+      let id = document.getElementById("main_input").value;
+      console.log("id: ", id);
+      const api_url = `https://swapi.dev/api/people/?search=${id}`;
+
+      // Function to hide the loader
+      function hideLoader() {
+        const list = (document.getElementById("results").style.display =
+          "block");
+        console.log("unhide API list");
+      }
+
+      const callApi = () => {
+        fetch(api_url)
+          // get response from the API
+          .then((response) => {
+            return response.json();
+          })
+          // Convert the response to JSON
+          .then((myJson) => {
+            // console.log(JSON.stringify(myJson));
+            // Returns Array of Objects
+            const results = myJson.results;
+            // Check results
+            console.log(results);
+            // TODO add Function to add Homeworld
+            //   const homeData = () => { result.homeworld
+            //  fetch(homeData).then((response) => {
+            //       return response.json();
+            //     }).then((myJson) => {
+            //       const results = myJson.results;
+            //       console.log(results + 'results from homeData');
+            //       results.map((results) => {
+            //         const home_planet = results.name;
+            //            })
+            //           });}
+
+            // Loop through the results
+            results.map((results) => {
+              // getter for the name and birth_year
+              const name = results.name;
+              const birth_year = results.birth_year;
+              return (document.getElementById(
+                "result_list"
+              ).innerHTML += `<li>Name:${name} - DOB:${birth_year} </li>`);
+            });
+          })
+          .catch((error) => {
+            console.log(error + "error with API call");
+          });
+        hideLoader();
+      };
+
+      callApi();
+    </script>
+  </body>
+</html>
